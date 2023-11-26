@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Send Email{% endblock %}
+
+{% block body %}
+    <h1>Send an Email</h1>
+    <form method="post" action="{{ path('send_email_form') }}">
+    <!-- Form fields -->
+    <label for="from">From:</label>
+    <input type="email" id="from" name="from" required><br><br>
+
+    <label for="to">To:</label>
+    <input type="email" id="to" name="to" required><br><br>
+
+    <label for="subject">Subject:</label>
+    <input type="text" id="subject" name="subject" required><br><br>
+
+    <label for="body">Body:</label>
+    <textarea id="body" name="body" required></textarea><br><br>
+
+    <button type="submit">Send Email</button>
+</form>
+
+{% endblock %}

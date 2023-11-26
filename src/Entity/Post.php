@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
 use App\Repository\PostRepository;
@@ -18,11 +20,12 @@ class Post
     #[ORM\Column(type: "integer")]
     private ?int $idPost = null;
 
- 
     
     #[ORM\Column(type: "integer")]
     private ?int $idEntreprise = null;
 
+    #[ORM\OneToMany(mappedBy: 'post' , targetEntity: Commentaires::class,cascade:["remove"],orphanRemoval:true )]
+    private Collection $commentaires;
     
     #[ORM\Column(length: 50)] 
     #[Assert\NotBlank(message: 'you should enter a title')]
@@ -30,10 +33,12 @@ class Post
 
     
     #[ORM\Column(length: 100)] 
+    #[Assert\NotBlank(message: 'you should add a type')]
     private ?string $typedecontenu = null;
 
     
     #[ORM\Column(length: 500)]
+    #[Assert\NotBlank(message: 'the content should not be empty')]
     private ?string $contenu = null;
 
     
@@ -43,8 +48,15 @@ class Post
     
 
     #[ORM\Column(length: 200)]
-    #[Assert\Url(message:'enter a valid url')]
+    
     private ? string $image = null;
+
+    
+
+    public function __construct()
+    {
+        $this->commentaires = new ArrayCollection();
+    }
 
     public function getIdPost(): ?int
     {
@@ -126,6 +138,36 @@ class Post
     public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commentaires>
+     */
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaire(Commentaires $commentaire): static
+    {
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires->add($commentaire);
+            $commentaire->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(Commentaires $commentaire): static
+    {
+        if ($this->commentaires->removeElement($commentaire)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaire->getPost() === $this) {
+                $commentaire->setPost(null);
+            }
+        }
 
         return $this;
     }

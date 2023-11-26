@@ -6,6 +6,7 @@ use App\Entity\Commentaires;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+
 /**
  * @extends ServiceEntityRepository<Commentaires>
  *
@@ -21,6 +22,14 @@ class CommentairesRepository extends ServiceEntityRepository
         parent::__construct($registry, Commentaires::class);
     }
 
+    public function findByPostId($postId)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.idPost = :postId')
+            ->setParameter('postId', $postId)
+            ->getQuery()
+            ->getResult();
+    }
 //    /**
 //     * @return Commentaires[] Returns an array of Commentaires objects
 //     */
