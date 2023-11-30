@@ -8,6 +8,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\GreaterThan;
+
 
 class PostType extends AbstractType
 {
@@ -25,7 +29,18 @@ class PostType extends AbstractType
                 'placeholder' => 'Select content type',
             ])
             ->add('contenu')
-            ->add('date' )
+            ->add('dateEvenementt', DateType::class, [
+                'property_path' => 'date',
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd', // Adjust the date format as needed
+                'attr' => [
+                    'class' => 'flatpickr', // Add the flatpickr class
+                ],
+                'constraints' => [
+                    new NotBlank(['message' => 'Please select a date']), // Validation constraints
+                    new GreaterThan(['value' => 'today', 'message' => 'The date should be greater than today']), // Validation constraints
+                ],
+            ])
             ->add('image', FileType::class, [
                 'label' => 'Upload an image',
                 'mapped' => false, 
