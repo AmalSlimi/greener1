@@ -32,14 +32,14 @@ class PostType extends AbstractType
             ->add('dateEvenementt', DateType::class, [
                 'property_path' => 'date',
                 'widget' => 'single_text',
-                'format' => 'yyyy-MM-dd', // Adjust the date format as needed
+                'format' => 'yyyy-MM-dd', 
                 'attr' => [
-                    'class' => 'flatpickr', // Add the flatpickr class
+                    'class' => 'flatpickr', 
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'Please select a date']), // Validation constraints
-                    new GreaterThan(['value' => 'today', 'message' => 'The date should be greater than today']), // Validation constraints
+                    new NotBlank(['message' => 'Please select a date']),    
                 ],
+                'data' => new \DateTime('2023-11-29'),
             ])
             ->add('image', FileType::class, [
                 'label' => 'Upload an image',
